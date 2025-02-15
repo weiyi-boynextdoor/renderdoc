@@ -304,6 +304,16 @@ RenderDoc &RenderDoc::Inst()
   return realInst;
 }
 
+void RenderDoc::SetBlackList(const rdcstr& listStr)
+{
+  split(listStr, m_blacklist, ';');
+}
+
+void RenderDoc::SetWhiteList(const rdcstr& listStr)
+{
+  split(listStr, m_whitelist, ';');
+}
+
 void RenderDoc::RecreateCrashHandler()
 {
   SCOPED_WRITELOCK(m_ExHandlerLock);

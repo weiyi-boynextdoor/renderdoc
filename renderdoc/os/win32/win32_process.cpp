@@ -147,6 +147,18 @@ void Process::ApplyEnvironmentModification()
 
   ApplyEnvModifications(envValues, modifications, true);
 
+  for(const auto &p : envValues)
+  {
+    if(p.first == BLACK_LIST_STR)
+    {
+      RenderDoc::Inst().SetBlackList(p.second);
+    }
+    else if(p.first == WHITE_LIST_STR)
+    {
+      RenderDoc::Inst().SetWhiteList(p.second);
+    }
+  }
+
   // these have been applied to the current process
   modifications.clear();
 }

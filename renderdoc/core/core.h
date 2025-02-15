@@ -473,6 +473,10 @@ public:
 
   void SetCaptureOptions(const CaptureOptions &opts);
   const CaptureOptions &GetCaptureOptions() const { return m_Options; }
+  void SetBlackList(const rdcstr& lstStr);
+  const rdcarray<rdcstr>& GetBlackList() const { return m_blacklist;}
+  void SetWhiteList(const rdcstr& lstStr);
+  const rdcarray<rdcstr>& GetWhiteList() const { return m_whitelist;}
   void RecreateCrashHandler();
   void UnloadCrashHandler();
   void RegisterMemoryRegion(void *mem, size_t size);
@@ -645,6 +649,9 @@ private:
   CaptureOptions m_Options;
   uint32_t m_Overlay;
 
+  rdcarray<rdcstr> m_blacklist;
+  rdcarray<rdcstr> m_whitelist;
+
   rdcarray<uint32_t> m_QueuedFrameCaptures;
 
   uint32_t m_RemoteIdent;
@@ -767,3 +774,6 @@ struct DeviceProtocolRegistration
     RenderDoc::Inst().RegisterDeviceProtocol(protocol, handler);
   }
 };
+
+constexpr const char *BLACK_LIST_STR = "RENDERDOC_BLACKLIST";
+constexpr const char *WHITE_LIST_STR = "RENDERDOC_WHITELIST";

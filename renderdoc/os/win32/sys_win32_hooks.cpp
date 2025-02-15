@@ -331,6 +331,9 @@ private:
 
     bool inject = true;
 
+    const auto &blacklist = RenderDoc::Inst().GetBlackList();
+    const auto &whitelist = RenderDoc::Inst().GetWhiteList();
+
     // sanity check to make sure we're not going to go into an infinity loop injecting into
     // ourselves.
     if(lpApplicationName)
@@ -341,6 +344,37 @@ private:
       {
         inject = false;
       }
+      else if(!whitelist.empty())
+      {
+        bool found = false;
+        for(const auto &exe : whitelist)
+        {
+          if(app.contains(exe))
+          {
+            found = true;
+            break;
+          }
+        }
+        if(!found)
+        {
+          inject = false;
+        }
+      }
+      else if(!blacklist.empty())
+      {
+        for(const auto &exe : blacklist)
+        {
+          if(app.contains(exe))
+          {
+            inject = false;
+            break;
+          }
+        }
+      }
+    }
+    if(!inject)
+    {
+      return false;
     }
     if(lpCommandLine)
     {
@@ -349,6 +383,33 @@ private:
       if(cmd.contains("renderdoccmd.exe") || cmd.contains("qrenderdoc.exe"))
       {
         inject = false;
+      }
+      else if(!whitelist.empty())
+      {
+        bool found = false;
+        for(const auto &exe : whitelist)
+        {
+          if(cmd.contains(exe))
+          {
+            found = true;
+            break;
+          }
+        }
+        if(!found)
+        {
+          inject = false;
+        }
+      }
+      else if(!blacklist.empty())
+      {
+        for(const auto &exe : blacklist)
+        {
+          if(cmd.contains(exe))
+          {
+            inject = false;
+            break;
+          }
+        }
       }
     }
 
